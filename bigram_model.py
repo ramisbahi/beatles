@@ -4,6 +4,9 @@ import collections
 
 import numpy as np
 
+dataset = "Eminem_dataset.txt"
+output = "Eminem_generated.txt"
+
 START_SONG = 'XXSS'  # Token for the start of a new song.
 START_LINE = 'XXSL'  # Token for the start of a new line.
 END_LINE = 'XXEL'  # Token for the end of a line.
@@ -15,7 +18,6 @@ SUFFIXES = (')', '?', '!', ',' , '...', '.', ':', '"')
 
 class ProbabilisticBigramLanguageModel(object):
     """A probabilistic bigram language model.
-
     Given a list of bigrams, the model builds a probability distribution
     over the bigrams.
     """
@@ -72,12 +74,14 @@ def create_bigrams(line):
     return bigrams
 
 if __name__ == '__main__':
-    with open('dataset.txt') as file_:
+    print("hi")
+    with open(dataset) as file_:
         songs = file_.readlines()
     lines = []
     for song in songs:
         song = song.strip()
         title, author, lyrics = song.split('\t')
+        print('{} {} {}', title, author)
         lyrics = '{} {} {}'.format(START_SONG, lyrics, END_SONG)
         lines.extend(lyrics.split('\\'))
 
@@ -105,4 +109,10 @@ if __name__ == '__main__':
             song[-1] = song[-1][:-1] + pred + " "
         else:
             song.append(pred + " ")
-    print("".join(song))
+
+
+    print("".join(song).replace("\\", "\n"))
+
+    with open(output, 'w') as file_:
+        line = "".join(song).replace("\\", "\n")
+        file_.write(line)
